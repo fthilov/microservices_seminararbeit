@@ -20,11 +20,4 @@ EXPOSE 3000
 # CMD ["npm", "start"]
 
 # Starte die Anwendung
-CMD ["npm", "start", "10", "dhbw-1", "5", "gpsd", "48.6", "8.6"] # GPS
-
-# Beispiel für die Verwendung der Anwendung
-# CMD ["npm", "start", "10", "dhbw-2", "5", "diss", "0", "-"] # Distanz seit Start (in km)
-# CMD ["npm", "start", "10", "dhbw-3", "5", "disp", "0", "-"] # Distanz seit Warenaufnahme (in km)
-# CMD ["npm", "start", "10", "dhbw-4", "5", "time", "0", "-"] # Zeitdauer seit Warenaufnahme (in Minuten)
-# CMD ["npm", "start", "10", "dhbw-5", "5", "batt", "80", "-"] # Ladezustand der Batterie (in %)
-# CMD ["npm", "start", "10", "dhbw-6", "5", "delivery", "0", "0.03"] # Ware ausgeliefert (true / false)
+CMD ["npm", "start"]
