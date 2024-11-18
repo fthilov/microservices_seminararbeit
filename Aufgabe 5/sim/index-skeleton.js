@@ -13,19 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 // add mqtt support
-var mqtt = require('mqtt');
-var client = mqtt.connect('mqtt://broker.hivemq.com');
+const mqtt = require('mqtt');
+const client = mqtt.connect('mqtt://broker.hivemq.com');
 
 const axios = require('axios');
-
-// parameter für die Übermittlung der Testdaten
-var timeinterval = 5;
-var locid = 'dhbw1';
-var simanzahl = 5;
-var sensortype = 'G';
-var min = 48.6;
-var max = 8.6;
-var value = min;
 
 const args = process.argv.slice(2);
 
@@ -63,8 +54,7 @@ if ((args.length) == 6) {
 }
 
 var mqttmsg = {};
-var i=0;
-var myinterval;
+var i = 0;
 console.log('min', min);
 
 async function intervalFunc() {
@@ -80,114 +70,87 @@ async function intervalFunc() {
   mqttmsg['locid'] = locid;
   console.log('datatype =', datatype);
 
-  // Handle GPS data
-  if (datatype == 'gpsd') {
-    // Set initial values in first iteration
-    if (i == 0) { 
-      console.log('i =', i);
-      gpslatitude = parseFloat(args[4]);
-      gpslongitude = parseFloat(args[5]);
-      value = 0;
-    } 
+  switch (datatype) {
+    case 'gpsd': // Handle GPS data
+      if (i == 0) { // Set initial values in first iteration
+        gpslatitude = parseFloat(args[4]);
+        gpslongitude = parseFloat(args[5]);
+        value = 0;
+      } 
+  
+      // Sending GPS data
+      mqttmsg['gpslatitude'] = (gpslatitude + value).toFixed(1);
+      mqttmsg['gpslongitude'] = (gpslongitude + value).toFixed(1);
+      mqttopic= 'SWS/' + locid + '/G';
+      value = value + 0.1;
+      break;
+      
+    case 'diss': // Handle distance since start
+      if (i == 0) { // Set initial values in first iteration
+        distance = parseFloat(args[4]);
+        value = 0;
+      }
+      
+      // Sending distance since start
+      mqttmsg['diss'] = (distance + value).toFixed(2);
+      mqttopic = 'SWS/' + locid + '/G';
+      value = value + 0.01;
+      break;
 
-    // Sending GPS data
-    console.log('value_before =', value.toFixed(1));
-    mqttmsg['gpslatitude'] = (gpslatitude + value).toFixed(1);
-    mqttmsg['gpslongitude'] = (gpslongitude + value).toFixed(1);
-    mqttopic= 'SWS/'+locid+'/G';
-    value = value + 0.1;
-    console.log('value_after =', value.toFixed(1));
-  }
+    case 'disp': // Handle distance since receiving goods
+      if (i == 0) { // Set initial values in first iteration
+        distance = parseFloat(args[4]);
+        value = 0;
+      }
 
-  // Handle distance since start
-  if (datatype == 'diss') {
-    // Set initial values in first iteration
-    if (i == 0) {
-      console.log('i =', i);
-      distance = parseFloat(args[4]);
-      value = 0;
-    }
-    
-    // Sending distance since start
-    console.log('value_before =', value.toFixed(2));
-    mqttmsg['diss'] = (distance + value).toFixed(2);
-    mqttopic = 'SWS/'+locid+'/G';
-    value = value + 0.01;
-    console.log('value_after =', value.toFixed(2));
-  }
+      // Sending distance since receiving goods
+      mqttmsg['disp'] = (distance + value).toFixed(2);
+      mqttopic = 'SWS/' + locid + '/G';
+      value = value + 0.01;
+      break;
 
-  // Handle distance since receiving goods
-  if (datatype == 'disp') {
-    // Set initial values in first iteration
-    if (i == 0) {
-      console.log('i =', i);
-      distance = parseFloat(args[4]);
-      value = 0;
-    }
+    case 'time': // Handle battery level
+      if (i == 0) { // Set initial values in first iteration
+        console.log('i =', i);
+        time = parseFloat(args[4]);
+        value = 0;
+      }
 
-    // Sending distance since receiving goods
-    console.log('value_before =', value.toFixed(2));
-    mqttmsg['disp'] = (distance + value).toFixed(2);
-    mqttopic = 'SWS/'+locid+'/G';
-    value = value + 0.01;
-    console.log('value_after =', value.toFixed(2));
-  }
+      // Sending time since receiving goods
+      mqttmsg['time'] = (time + value).toFixed(2);
+      mqttopic = 'SWS/' + locid + '/G';
+      value = value + timeinterval / 60;
+      break;
 
-  // Handle time since receiving goods
-  if (datatype == 'time') {
-    // Set initial values in first iteration
-    if (i == 0) {
-      console.log('i =', i);
-      time = parseFloat(args[4]);
-      value = 0;
-    }
+    case 'batt': // Handle battery level
+      if (i == 0) { // Set initial values in first iteration
+        time = parseInt(args[4]);
+        value = 0;
+      } 
+      
+      // Sending battery level
+      mqttmsg['batt'] = time + value;
+      mqttopic = 'SWS/' + locid + '/G';
+      value = value - 1;
+      break;
 
-    // Sending time since receiving goods
-    console.log('value_before =', value.toFixed(2));
-    mqttmsg['time'] = (time + value).toFixed(2);
-    mqttopic = 'SWS/'+locid+'/G';
-    value = value + timeinterval / 60;
-    console.log('value_after =', value.toFixed(2));
-  }
+    case 'delivery': // Handle delivery status
+      if (i == 0) { // Set initial values in first iteration
+        goodDelivered = false
+        value = 0;
+      }
 
-  // Handle battery level
-  if (datatype == 'batt') {
-    // Set initial values in first iteration
-    if (i == 0) { 
-      console.log('i =', i);
-      time = parseInt(args[4]);
-      value = 0;
-    } 
-    
-    // Sending battery level
-    console.log('value_before =', value);
-    mqttmsg['batt'] = time + value;
-    mqttopic = 'SWS/'+locid+'/G';
-    value = value - 1;
-    console.log('value_after =', value);  
-  }
+      start = (parseFloat(args[4]) + value).toFixed(2);
+      end = parseFloat(args[5]).toFixed(2);
 
-  // Handle delivery status
-  if (datatype == 'delivery') {
-    // Set initial values in first iteration
-    if (i == 0) {
-      console.log('i =', i);
-      goodDelivered = false
-      value = 0;
-    }
+      // Sending delivery status
+      if (start == end) {
+        goodDelivered = true;
+      }
 
-    start = (parseFloat(args[4]) + value).toFixed(2);
-    end = parseFloat(args[5]).toFixed(2);
-
-    // Sending delivery status
-    console.log('value_before =', value.toFixed(2));
-    if (start == end) {
-      goodDelivered = true;
-    }
-    mqttmsg['delivery'] = goodDelivered;
-    mqttopic = 'SWS/'+locid+'/G';
-    value = value + 0.01;
-    console.log('value_after =', value.toFixed(2));
+      mqttmsg['delivery'] = goodDelivered;
+      mqttopic = 'SWS/' + locid + '/G';
+      value = value + 0.01;
   }
     
   console.log('mqttopic =', mqttopic); 
@@ -195,15 +158,15 @@ async function intervalFunc() {
   
   client.publish(mqttopic, JSON.stringify(mqttmsg), (err) => {
     if (err) {
-      console.log('Error publishing message', err);
+      console.log('Error in publishing');
     } else {
-      console.log('Message sent');
+      console.log('Message published');
     }
   });
+
   i++;
 }
-app.listen(4000, () =>{
-  myinterval = setInterval(intervalFunc, 10000);
+app.listen(4000, () => {
+  myinterval = setInterval(intervalFunc, timeinterval * 1000);
   console.log('Listening on port 4000')
-})
-;
+});

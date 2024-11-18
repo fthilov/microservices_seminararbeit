@@ -3,51 +3,57 @@ services:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-gpsd
     ports:
       - "3000:3000"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-1", "5", "gpsd", "48.6", "8.6"]
+    command: ["npm", "start", "20", "dhbw-1", "5", "gpsd", "48.6", "8.6"]
   sim-diss:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-diss
     ports:
       - "3001:3001"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-2", "5", "diss", "0", "-"]
+    command: ["npm", "start", "20", "dhbw-2", "5", "diss", "0", "-"]
   sim-disp:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-disp
     ports:
       - "3002:3002"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-3", "5", "disp", "0", "-"]
+    command: ["npm", "start", "20", "dhbw-3", "5", "disp", "0", "-"]
   sim-time:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-time
     ports:
       - "3003:3003"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-4", "5", "time", "0", "-"]
+    command: ["npm", "start", "20", "dhbw-4", "5", "time", "0", "-"]
   sim-batt:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-batt
     ports:
       - "3004:3004"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-5", "5", "batt", "80", "-"]
+    command: ["npm", "start", "20", "dhbw-5", "5", "batt", "80", "-"]
   sim-delivery:
     build:
       context: .  # Verzeichnis mit Dockerfile
       dockerfile: Dockerfile
+    container_name: sim-delivery
     ports:
       - "3005:3005"  # Veröffentlicht den Port 3000
-    command: ["npm", "start", "10", "dhbw-6", "5", "delivery", "0", "0.03"]
-  mosquitto:
+    command: ["npm", "start", "20", "dhbw-6", "5", "delivery", "0", "0.03"]
+  mqtt-broker:
     image: eclipse-mosquitto:latest
-    container_name: mosquitto
+    container_name: mqtt-broker
     ports:
-      - "1883:1883"   # Standard MQTT-Port
+      - "1883:1883"
     volumes:
-      - ./mosquitto/config:/mosquitto/config   # Pfad zur Konfigurationsdatei
-      - ./mosquitto/data:/mosquitto/data       # Pfad für persistente Daten
-      - ./mosquitto/log:/mosquitto/log 
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
   
