@@ -1,5 +1,5 @@
 # Basis-Image mit Node.js und npm
-FROM node:16
+FROM node:latest
 
 # Erstelle das Arbeitsverzeichnis im Container
 WORKDIR /app

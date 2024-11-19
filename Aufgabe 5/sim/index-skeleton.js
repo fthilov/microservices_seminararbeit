@@ -40,22 +40,26 @@ if ((args.length) == 6) {
   min = parseFloat(args[4]);
   max = parseFloat(args[5]);
 } else {
-    console.log("Wrong no of arguemts ");
-    console.log('arg0 = timeinterval in dem die Daten gesendet werden in sec');
-    console.log('arg1 = unique id of drone - 6 stellig');
-    console.log('arg2 = Anzahl der Daten in Zyklen - 2stellig');
-    console.log('arg3 = identifier type of messaurement - gpsd= gps data, diss=Distanz seit Start, disp=Distanz seit Warenaufnahme, battl=Ladezustand Batterie, ...');
-    console.log('arg4 = start value');
-    console.log('arg5 = end value');
-    console.log('bsp =npm start 10 dhbw-1 5 gpsd 48.6 8.6');
-    console.log('bsp will send every 10 sec a gps value of 48.6 and 8.6 incremented by 0.1 on each message');
-   
-    process.exit();    
+  console.log("Wrong no of arguemts ");
+  console.log('arg0 = timeinterval in dem die Daten gesendet werden in sec');
+  console.log('arg1 = unique id of drone - 6 stellig');
+  console.log('arg2 = Anzahl der Daten in Zyklen - 2stellig');
+  console.log('arg3 = identifier type of messaurement - gpsd= gps data, diss=Distanz seit Start, disp=Distanz seit Warenaufnahme, battl=Ladezustand Batterie, ...');
+  console.log('arg4 = start value');
+  console.log('arg5 = end value');
+  console.log('bsp =npm start 10 dhbw-1 5 gpsd 48.6 8.6');
+  console.log('bsp will send every 10 sec a gps value of 48.6 and 8.6 incremented by 0.1 on each message');
+  
+  process.exit();    
 }
 
 var mqttmsg = {};
 var i = 0;
 console.log('min', min);
+
+// client.on('error', (err) => {
+//   console.error('Verbindungsfehler:', err);
+// });
 
 async function intervalFunc() {
   
@@ -167,6 +171,6 @@ async function intervalFunc() {
   i++;
 }
 app.listen(4000, () => {
-  myinterval = setInterval(intervalFunc, timeinterval * 1000);
+  setInterval(intervalFunc, timeinterval * 1000);
   console.log('Listening on port 4000')
 });
