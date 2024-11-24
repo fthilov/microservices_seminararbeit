@@ -29,6 +29,7 @@ function mqtt_error(err) {
 }
 
 function mqtt_messsageReceived(topic, battery_level) {
+    console.log(`Topic = ${topic}`);
     console.log(`Battery level is low. Current charging level: ${battery_level}`);
 }
 
