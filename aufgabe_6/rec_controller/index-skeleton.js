@@ -48,7 +48,7 @@ function mqtt_error(err) {
 	if (err) {console.log(err);}
 }
 
-async function mqtt_messsageReceived(topic, message, packet) {
+async function mqtt_messsageReceived(topic, message) {
     console.log('Topic =', topic);
     console.log('Message =', JSON.parse(message));
 
