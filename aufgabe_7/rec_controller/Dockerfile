@@ -2,7 +2,7 @@
 FROM node:18-alpine
 
 # Arbeitsverzeichnis im Container festlegen
-WORKDIR /app
+WORKDIR /
 
 # Package-Informationen kopieren
 COPY package*.json ./
@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Anwendungscode kopieren
-COPY ./ ./
+COPY . .
 
 # Start der Anwendung
 CMD ["node", "index-skeleton.js"]

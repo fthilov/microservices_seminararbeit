@@ -6,6 +6,7 @@ services:
       - fbbridge
     ports:
       - "1883:1883"
+    restart: always
     volumes:
       - ./sim/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
@@ -16,6 +17,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - fbbridge
+    restart: always
       
   mongodb:
     image: mongo:latest
@@ -24,9 +26,9 @@ services:
       - fbbridge
     ports:
       - ${DB_PORT:-27017}:27017
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=example
+    restart: always
+    env_file:
+      - ./rec_controller/.env
     volumes:
       - ./rec_controller/mongo/data:/data/db
 
@@ -37,6 +39,7 @@ services:
       dockerfile: Dockerfile
     networks:
       - fbbridge
+    restart: always
 
 networks:
   fbbridge:
