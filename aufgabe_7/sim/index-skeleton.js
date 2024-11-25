@@ -132,6 +132,7 @@ function intervalFunc() {
   client.publish(mqttopic, JSON.stringify(mqttmsg));
   i++;
 }
+
 app.listen(4000, () => {
   setInterval(intervalFunc, timeinterval * 1000);
   console.log('Listening on port 4000')

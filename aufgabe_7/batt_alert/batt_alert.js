@@ -1,6 +1,6 @@
 const mqtt = require('mqtt');
 const topic = 'battery_alert';
-const client  = mqtt.connect('mqtt://localhost:1883');
+const client  = mqtt.connect('mqtt://mqtt-broker:1883');
 
 client.on('connect', mqtt_connect);
 client.on('reconnect', mqtt_reconnect);

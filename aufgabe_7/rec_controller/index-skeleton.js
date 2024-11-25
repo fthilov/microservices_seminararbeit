@@ -2,11 +2,11 @@ require('dotenv').config();
 const mqtt = require('mqtt');
 const { MongoClient } = require('mongodb');
 const topic = 'SWS/#';
-const client  = mqtt.connect('mqtt://localhost:1883');
+const client = mqtt.connect('mqtt://mqtt-broker:1883');
 
 const DB_USER = process.env.DB_USER || '';
 const DB_PASSWORD = process.env.DB_PASSWORD || '';
-const DB_HOSTNAME = process.env.DB_HOSTNAME || 'localhost';
+const DB_HOSTNAME = process.env.DB_HOSTNAME || 'mongodb';
 const DB_PORT = process.env.DB_PORT || '27017';
 const DB_NAME = process.env.DB_NAME || 'rec_data';
 
