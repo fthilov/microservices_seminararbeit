@@ -1,4 +1,3 @@
-require('dotenv').config();
 const mqtt = require('mqtt');
 const { MongoClient } = require('mongodb');
 const topic = 'SWS/#';

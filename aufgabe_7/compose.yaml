@@ -22,15 +22,17 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    command: mongod --port ${DB_PORT:-27017}
     networks:
       - fbbridge
     ports:
       - ${DB_PORT:-27017}:27017
     restart: always
-    env_file:
-      - ./rec_controller/.env
     volumes:
       - ./rec_controller/mongo/data:/data/db
+    env_file:
+      - path: .env
+        required: false
 
   rec_controller:
     container_name: rec_controller
@@ -40,7 +42,10 @@ services:
     networks:
       - fbbridge
     restart: always
-
+    env_file:
+      - path: .env
+        required: false
+      
 networks:
   fbbridge:
     name: fbbridge
