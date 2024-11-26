@@ -1,0 +1,14 @@
+{
+  "name": "batt_alert",
+  "version": "1.0.0",
+  "main": "batt_alert.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "mqtt": "^5.10.2"
+  }
+}

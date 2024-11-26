@@ -1,0 +1,52 @@
+services:
+  mqtt-broker:
+    container_name: mqtt-broker
+    image: eclipse-mosquitto:latest
+    networks:
+      - fbbridge
+    ports:
+      - "1883:1883"
+    restart: always
+    volumes:
+      - ./sim/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  batt_alert:
+    container_name: batt_alert
+    build:
+      context: ./batt_alert
+      dockerfile: Dockerfile
+    networks:
+      - fbbridge
+    restart: always
+      
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    command: mongod --port ${DB_PORT:-27017}
+    networks:
+      - fbbridge
+    ports:
+      - ${DB_PORT:-27017}:27017
+    restart: always
+    volumes:
+      - ./rec_controller/mongo/data:/data/db
+    env_file:
+      - path: .env
+        required: false
+
+  rec_controller:
+    container_name: rec_controller
+    build:
+      context: ./rec_controller
+      dockerfile: Dockerfile
+    networks:
+      - fbbridge
+    restart: always
+    env_file:
+      - path: .env
+        required: false
+      
+networks:
+  fbbridge:
+    name: fbbridge
+    driver: bridge
