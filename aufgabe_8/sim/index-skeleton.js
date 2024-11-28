@@ -5,7 +5,7 @@ const mqtt = require('mqtt');
 const app = express();
 app.use(cors());
 app.use(express.json());
-const client = mqtt.connect('mqtt://localhost:1883');
+const client = mqtt.connect('mqtt://localhost:30001');
 const args = process.argv.slice(2);
 
 if (args[0] == '?') {

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mosquitto
+  labels:
+    app: mosquitto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mosquitto
+  template:
+    metadata:
+      labels:
+        app: mosquitto
+    spec:
+      containers:
+      - name: mosquitto
+        image: eclipse-mosquitto:latest
+        ports:
+        - containerPort: 1883
+        volumeMounts:
+        - name: mosquitto-config-volume
+          mountPath: /mosquitto/config/mosquitto.conf
+          subPath: mosquitto.conf
+          
+      volumes:
+        - name: mosquitto-config-volume
+          configMap:
+            name: mosquitto-config
+        
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-broker
+spec:
+  selector:
+    app: mosquitto
+  ports:
+    - protocol: TCP
+      port: 1883        # The port exposed by the service (inside the cluster)
+      targetPort: 1883  # The port the broker listens to in the container
+      nodePort: 30001   # The port exposed by the service (outside the cluster)
+  type: NodePort
+
+        

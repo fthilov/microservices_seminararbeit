@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batt-alert-deployment
+  labels:
+    app: batt-alert
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: batt-alert
+  template:
+    metadata:
+      labels:
+        app: batt-alert
+    spec:
+      containers:
+      - name: batt-alert
+        image: ftvdb/batt-alert:latest
+
+        

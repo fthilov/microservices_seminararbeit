@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rec-controller-deployment
+  labels:
+    app: rec-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rec-controller
+  template:
+    metadata:
+      labels:
+        app: rec-controller
+    spec:
+      containers:
+      - name: rec-controller
+        image: ftvdb/rec_controller:latest
+        env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-root-username
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-root-password
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-root-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-root-password
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-hostname
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-port
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-secret
+                key: mongodb-database
+        
