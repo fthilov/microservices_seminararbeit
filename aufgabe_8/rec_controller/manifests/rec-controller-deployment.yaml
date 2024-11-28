@@ -14,9 +14,17 @@ spec:
       labels:
         app: rec-controller
     spec:
+      restartPolicy: Always
       containers:
       - name: rec-controller
         image: ftvdb/rec_controller:latest
+        resources:
+            requests:
+              memory: "64Mi" 
+              cpu: "50m"     
+            limits:
+              memory: "128Mi" # Maximale 128 MB RAM
+              cpu: "100m"     # Maximale 0,1 CPU
         env:
           - name: MONGO_INITDB_ROOT_USERNAME
             valueFrom:
@@ -24,16 +32,6 @@ spec:
                 name: mongodb-secret
                 key: mongodb-root-username
           - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongodb-root-password
-          - name: DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-secret
-                key: mongodb-root-username
-          - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: mongodb-secret
