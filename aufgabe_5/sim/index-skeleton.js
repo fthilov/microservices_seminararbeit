@@ -82,7 +82,7 @@ function intervalFunc() {
       diss = args[4];
     } 
 
-    mqttmsg['diss'] = diss;
+    mqttmsg['disp'] = diss;
     mqttopic = 'SWS/' + locid + '/DP';
     diss = (parseFloat(diss) + 0.1).toFixed(1);
   }

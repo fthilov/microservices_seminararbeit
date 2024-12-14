@@ -3,10 +3,11 @@
 ## Aufgabe 5
 
 ### 1. Navigiere in den Ordner 'aufgabe_5/sim': `cd aufgabe_5/sim`
-### 2. Führen Sie folgenden Befehl aus: `docker compose up -d`
-### 3. Vergewisseren Sie sich, dass der Container in Docker Desktop läuft
-### 4. Gehen Sie in Docker Desktop in den Container und führe unter dem Reiter 'exec' folgenden Befehl aus: `mosquitto_sub -h localhost -p 1883 -t "SWS/#"``
-### 5. Führen Sie nun in dem VSCode Terminal folgenden Befehl aus: `npm start 5 dhbw-1 10 gpsd 48.1 50.3`
+### 2. Führen Sie folgenden Befehl aus: `npm i`
+### 3. Führen Sie folgenden Befehl aus: `docker compose up -d`
+### 4. Vergewisseren Sie sich, dass der Container in Docker Desktop läuft
+### 5. Gehen Sie in Docker Desktop in den Container und führe unter dem Reiter 'exec' folgenden Befehl aus: `mosquitto_sub -h localhost -p 1883 -t "SWS/#"`
+### 6. Führen Sie nun in dem VSCode Terminal folgenden Befehl aus: `npm start 5 dhbw-1 10 gpsd 48.1 50.3`
 
 Information zum Simulieren der Daten:
 #### datatype == gpsd - Senden von GPS Daten
@@ -15,7 +16,7 @@ max = longitude
 Bsp: `npm start 5 dhbw-1 10 gpsd 48.1 50.3`
 #### datatype == diss - Senden von der Distanz seit Start
 min = start distance  
-max = _
+max = _  
 Bsp: `npm start 5 dhbw-1 10 diss 0 -`
 #### datatype == disp - Senden von der Distanz seit Warenaufnahme
 min = start distance  
