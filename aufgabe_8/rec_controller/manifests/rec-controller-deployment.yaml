@@ -51,4 +51,19 @@ spec:
               secretKeyRef:
                 name: mongodb-secret
                 key: mongodb-database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rec-controller-service
+  labels:
+    app: rec-controller
+spec:
+  type: LoadBalancer
+  selector:
+    app: rec-controller
+  ports:
+    - protocol: TCP
+      port: 80          # Externer Zugriff über Port 80
+      targetPort: 8080  # Interner Port des Containers
         
